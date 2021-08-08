@@ -40,6 +40,7 @@ public:
 	void testCommand();
 	void testUUID();
 	void testConnectURI();
+	void testArray();
 	void setUp();
 	void tearDown();
 

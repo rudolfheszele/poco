@@ -19,6 +19,7 @@
 #include "Poco/MongoDB/Cursor.h"
 #include "Poco/MongoDB/ObjectId.h"
 #include "Poco/MongoDB/Binary.h"
+#include "Poco/MongoDB/Array.h"
 #include "Poco/Net/NetException.h"
 #include "Poco/UUIDGenerator.h"
 #include "MongoDBTest.h"
@@ -451,6 +452,27 @@ void MongoDBTest::testConnectURI()
 #endif
 }
 
+void MongoDBTest::testArray()
+{
+	Document::Ptr document = new Document();
+
+	document->addNewDocument("testDocument")
+		.add("int", 1)
+		.add("string", "stringItem");
+	document->addNewDocument<Array>("testArray")
+		.add(2)
+		.add("item");
+
+	const int documentIntValue = document->get<Document::Ptr>("testDocument")->get<int>("int");
+	const std::string documentStringValue = document->get<Document::Ptr>("testDocument")->get<std::string>("string");
+	const int arrayIntValue = document->get<Array::Ptr>("testArray")->get<int>(0);
+	const std::string arrayStringValue = document->get<Array::Ptr>("testArray")->get<std::string>(1);
+
+	assertEquals(documentIntValue, 1);
+	assertEquals(documentStringValue, "stringItem");
+	assertEquals(arrayIntValue, 2);
+	assertEquals(arrayStringValue, "item");
+}
 
 CppUnit::Test* MongoDBTest::suite()
 {
@@ -484,5 +506,6 @@ CppUnit::Test* MongoDBTest::suite()
 	CppUnit_addTest(pSuite, MongoDBTest, testCommand);
 	CppUnit_addTest(pSuite, MongoDBTest, testUUID);
 	CppUnit_addTest(pSuite, MongoDBTest, testConnectURI);
+	CppUnit_addTest(pSuite, MongoDBTest, testArray);
 	return pSuite;
 }

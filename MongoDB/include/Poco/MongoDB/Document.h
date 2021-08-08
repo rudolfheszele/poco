@@ -85,10 +85,16 @@ public:
 		return addElement(new ConcreteElement<std::string>(name, std::string(value)));
 	}
 
-	Document& addNewDocument(const std::string& name);
+	template<typename T = Document>
+	T& addNewDocument(const std::string& name)
 		/// Create a new document and add it to this document.
 		/// Unlike the other add methods, this method returns
 		/// a reference to the new document.
+	{
+		typename T::Ptr newDoc = new T();
+		add(name, newDoc);
+		return *newDoc;
+	}
 
 	void clear();
 		/// Removes all elements from the document.
@@ -199,14 +205,6 @@ inline Document& Document::addElement(Element::Ptr element)
 {
 	_elements.push_back(element);
 	return *this;
-}
-
-
-inline Document& Document::addNewDocument(const std::string& name)
-{
-	Document::Ptr newDoc = new Document();
-	add(name, newDoc);
-	return *newDoc;
 }
 
 

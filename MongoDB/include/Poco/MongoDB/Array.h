@@ -40,6 +40,36 @@ public:
 		/// Destroys the Array.
 
 	template<typename T>
+	Array& add(T value)
+		/// Creates an element with the given value and
+		/// adds it to the end of the array.
+		///
+		/// The active array is returned to allow chaining of the add methods.
+	{
+		Document::add<T>(Poco::NumberFormatter::format(_elements.size()), value);
+		return *this;
+	}
+
+	Array& add(const char* value)
+		/// Creates an element with the given value and
+		/// adds it to the end of the array.
+		///
+		/// The active array is returned to allow chaining of the add methods.
+	{
+		Document::add(Poco::NumberFormatter::format(_elements.size()), value);
+		return *this;
+	}
+
+	template<typename T>
+	T& addNewDocument()
+		/// Create a new document and add it to the end of this array.
+		/// Unlike the other add methods, this method returns
+		/// a reference to the new document.
+	{
+		return Document::addNewDocument<T>(Poco::NumberFormatter::format(_elements.size()));
+	}
+
+	template<typename T>
 	T get(int pos) const
 		/// Returns the element at the given index and tries to convert
 		/// it to the template type. If the element is not found, a
